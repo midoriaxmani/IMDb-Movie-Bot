@@ -1,5 +1,11 @@
 import logging
 import logging.config
+import time
+import os
+
+# Force time synchronization to avoid "msg_id is too low" error
+os.environ['TZ'] = 'UTC'
+time.tzset()
 
 # Get logging configurations
 logging.config.fileConfig('logging.conf')
@@ -38,13 +44,12 @@ class Bot(Client):
         temp.U_NAME = me.username
         temp.B_NAME = me.first_name
         self.username = '@' + me.username
-        logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+        logging.info(f"{me.first_name} with Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
         logging.info(LOG_STR)
 
     async def stop(self, *args):
         await super().stop()
         logging.info("Bot stopped. Bye.")
-
 
 app = Bot()
 app.run()
